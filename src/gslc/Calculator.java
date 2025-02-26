@@ -10,28 +10,37 @@ public class Calculator {
 
 		public RiskFactor calculateMotoristRisk() {
 			if (motorist.getPointsOnLicense() > 3 || motorist.getAge() < 25)
-				return RiskFactor.HIGH_RISK;
+				return new HighRiskFactor();
 			if (motorist.getPointsOnLicense() > 0)
-				return RiskFactor.MODERATE_RISK;
-
-			return RiskFactor.LOW_RISK;
+				return new ModerateRiskFactor();
+			return new LowRiskFactor();
 		}
 
 		public double calculateInsurancePremium(double insuranceValue) {
-			RiskFactor riskFactor = calculateMotoristRisk();
-			switch (riskFactor) {
-			case LOW_RISK:
-				return insuranceValue * 0.02;
-			case MODERATE_RISK:
-				return insuranceValue * 0.04;
-			default:
-				return insuranceValue * 0.06;
-			}
+			return calculateMotoristRisk().calculate(insuranceValue);
 		}
 	}
 
-	enum RiskFactor {
-		LOW_RISK, MODERATE_RISK, HIGH_RISK
+	interface RiskFactor {
+		double calculate(double insurance);
+	}
+
+	class LowRiskFactor implements RiskFactor {
+		public double calculate(double insurance) {
+			return insurance * 0.02;
+		}
+	}
+
+	class ModerateRiskFactor implements RiskFactor {
+		public double calculate(double insurance) {
+			return insurance * 0.04;
+		}
+	}
+
+	class HighRiskFactor implements RiskFactor {
+		public double calculate(double insurance) {
+			return insurance * 0.06;
+		}
 	}
 
 	class Motorist {
