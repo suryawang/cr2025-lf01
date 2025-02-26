@@ -12,7 +12,7 @@ public class IntroduceNullObject {
 
 	class NullCustomer extends Customer {
 		public NullCustomer() {
-			super("", BillingPlan.basic(), new NullPaymentHistory());
+			super("N/A", BillingPlan.basic(), new NullPaymentHistory());
 		}
 	}
 
