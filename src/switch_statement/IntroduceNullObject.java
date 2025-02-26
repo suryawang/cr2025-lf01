@@ -6,7 +6,13 @@ public class IntroduceNullObject {
 		private Customer customer;
 
 		public Customer getCustomer() {
-			return customer;
+			return customer == null ? new NullCustomer() : customer;
+		}
+	}
+
+	class NullCustomer extends Customer {
+		public NullCustomer() {
+			super("", BillingPlan.basic(), new NullPaymentHistory());
 		}
 	}
 
@@ -42,34 +48,19 @@ public class IntroduceNullObject {
 		}
 	}
 
+	class NullPaymentHistory extends PaymentHistory {
+		public int getWeeksDelinquentInLastYear() {
+			return 0;
+		}
+	}
+
 	public void test() {
 		Company site = new Company();
 		Customer customer = site.getCustomer();
-		String customerName;
-		if (customer == null) {
-			customerName = "N/A";
-		} else {
-			customerName = customer.getName();
-		}
+		System.out.println(customer.getName());
+		System.out.println(customer.getPlan().getDetail());
+		System.out.println(customer.getHistory().getWeeksDelinquentInLastYear());
 
-		// …
-		BillingPlan plan;
-		if (customer == null) {
-			plan = BillingPlan.basic();
-		} else {
-			plan = customer.getPlan();
-		}
-
-		// …
-		int weeksDelinquent;
-		if (customer == null) {
-			weeksDelinquent = 0;
-		} else {
-			weeksDelinquent = customer.getHistory().getWeeksDelinquentInLastYear();
-		}
-		System.out.println(customerName);
-		System.out.println(plan.getDetail());
-		System.out.println(weeksDelinquent);
 	}
 
 	public static void main(String[] a) {
