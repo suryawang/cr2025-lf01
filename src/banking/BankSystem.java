@@ -10,6 +10,8 @@ import java.io.*;
 import java.awt.PrintJob.*;
 import javax.swing.plaf.metal.*;
 
+import banking.db.Database;
+
 public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	// Main Place on Form where All Child Forms will Shown.
@@ -59,20 +61,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 	private String d = sdf.format(currDate);
 
-	// Following all Variables are use in BankSystem's IO's.
-
-	// Variable use in Reading the BankSystem Records File & Store it in an Array.
-	private int count = 0;
-	private int rows = 0;
-	private int total = 0;
-
-	// String Type Array use to Load Records From File.
-	private String records[][] = new String[500][6];
-
-	// Variable for Reading the BankSystem Records File.
-	private FileInputStream fis;
-	private DataInputStream dis;
-
+	private Database db = new Database();
 	// Constructor of The Bank Program to Iniatilize all Variables of Program.
 
 	public BankSystem() {
@@ -590,7 +579,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	void getAccountNo() {
 
 		String printing;
-		rows = 0;
+		//rows = 0;
 		boolean b = populateArray();
 		if (b == false) {
 		} else {
@@ -616,70 +605,38 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 	// Function use to load all Records from File when Application Execute.
 
 	boolean populateArray() {
-
-		boolean b = false;
-		try {
-			fis = new FileInputStream("Bank.dat");
-			dis = new DataInputStream(fis);
-			// Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF();
-				}
-				rows++;
-			}
-		} catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				b = false;
-			} else {
-				b = true;
-				try {
-					dis.close();
-					fis.close();
-				} catch (Exception exp) {
-				}
-			}
-		}
-		return b;
-
+		db.populateArray();
+		if (db.getRows() == 0)
+			return false;
+		return true;
 	}
 
 	// Function use to Find Record by Matching the Contents of Records Array with
 	// InputBox.
 
 	void findRec(String rec) {
-
-		boolean found = false;
-		for (int x = 0; x < total; x++) {
-			if (records[x][0].equals(rec)) {
-				found = true;
-				printRecord(makeRecordPrint(x));
-				break;
-			}
-		}
-		if (found == false) {
+		int fi = db.findRec(rec);
+		if (fi > -1)
+			printRecord(makeRecordPrint(fi));
+		else {
 			JOptionPane.showMessageDialog(this, "Account No. " + rec + " doesn't Exist.", "BankSystem - WrongNo",
 					JOptionPane.PLAIN_MESSAGE);
 			getAccountNo();
 		}
-
 	}
 
 	// Function use to make Current Record ready for Print.
 
 	String makeRecordPrint(int rec) {
-
+		var records = db.get(rec);
 		String data;
 		String data0 = "               BankSystem [Pvt] Limited.               \n"; // Page Title.
 		String data1 = "               Customer Balance Report.              \n\n"; // Page Header.
-		String data2 = "  Account No.:       " + records[rec][0] + "\n";
-		String data3 = "  Customer Name:     " + records[rec][1] + "\n";
-		String data4 = "  Last Transaction:  " + records[rec][2] + ", " + records[rec][3] + ", " + records[rec][4]
+		String data2 = "  Account No.:       " + records[0] + "\n";
+		String data3 = "  Customer Name:     " + records[1] + "\n";
+		String data4 = "  Last Transaction:  " + records[2] + ", " + records[3] + ", " + records[4]
 				+ "\n";
-		String data5 = "  Current Balance:   " + records[rec][5] + "\n\n";
+		String data5 = "  Current Balance:   " + records[5] + "\n\n";
 		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n"; // Page Footer.
 		String sep0 = " -----------------------------------------------------------\n";
 		String sep1 = " -----------------------------------------------------------\n";
