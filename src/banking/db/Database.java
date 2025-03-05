@@ -61,6 +61,11 @@ public class Database {
 	public String[] get(int i) {
 		return records[i];
 	}
+	
+	public void set(int index, String... arr) {
+		for(int i=0;i<6;i++)
+			records[index][i] = arr[i];
+	}
 
 	// Function use to Delete an Element from the Array.
 	public boolean delRec(int recCount) throws IOException {
@@ -74,14 +79,14 @@ public class Database {
 					}
 				}
 				total = total - 1;
-				return deleteFile();
+				return save();
 			}
 		} catch (ArrayIndexOutOfBoundsException ex) {
 		}
 		return false;
 	}
 
-	public boolean deleteFile() throws IOException {
+	public boolean save() throws IOException {
 		FileOutputStream fos = new FileOutputStream("Bank.dat");
 		DataOutputStream dos = new DataOutputStream(fos);
 		var status = false;
