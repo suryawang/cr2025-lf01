@@ -8,25 +8,30 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import banking.model.Customer;
+
 public class Database {
 	private FileInputStream fis;
 	private DataInputStream dis;
 	private int rows = 0;
 
 	// String Type Array use to Load Records From File.
-	private String records[][] = new String[500][6];
+	private Customer records[] = new Customer[500];
 
 	// Function use to load all Records from File when Application Execute.
 	public void populateArray() {
 		try {
-			if(rows>0) return;
+			if (rows > 0)
+				return;
 			fis = new FileInputStream("Bank.dat");
 			dis = new DataInputStream(fis);
 			// Loop to Populate the Array.
 			while (true) {
+				String[] temp = new String[6];
 				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF();
+					temp[i] = dis.readUTF();
 				}
+				records[rows] = Customer.fromDb(temp);
 				rows++;
 			}
 		} catch (Exception ex) {
@@ -43,33 +48,35 @@ public class Database {
 		}
 
 	}
+
 	public int getRows() {
 		return rows;
 	}
 
 	public int findRec(String no) {
 		for (int x = 0; x < rows; x++)
-			if (records[x][0].equals(no))
-				return x;
-		return -1;
-	}
-	public int findRecByName(String name) {
-		for (int x = 0; x < rows; x++)
-			if (records[x][1].equalsIgnoreCase(name))
+			if (records[x].getNo().equals(no))
 				return x;
 		return -1;
 	}
 
-	public String[] get(int i) {
+	public int findRecByName(String name) {
+		for (int x = 0; x < rows; x++)
+			if (records[x].getName().equalsIgnoreCase(name))
+				return x;
+		return -1;
+	}
+
+	public Customer get(int i) {
 		return records[i];
 	}
-	
-	public void set(int index, String... arr) {
-		for(int i=0;i<6;i++)
-			records[index][i] = arr[i];
+
+	public void set(int index, Customer value) {
+		records[index] = value;
 	}
-	public void add(String ...arr) {
-		set(rows,arr);
+
+	public void add(Customer value) {
+		set(rows, value);
 		rows++;
 	}
 
@@ -79,8 +86,8 @@ public class Database {
 			if (records != null) {
 				for (int i = recCount; i < rows; i++) {
 					for (int r = 0; r < 6; r++) {
-						records[i][r] = records[i + 1][r];
-						if (records[i][r] == null)
+						records[i] = records[i + 1];
+						if (records[i] == null)
 							break;
 					}
 				}
@@ -98,9 +105,10 @@ public class Database {
 		var status = false;
 		if (records != null) {
 			for (int i = 0; i < rows; i++) {
+				var t = records[i].toDb();
 				for (int r = 0; r < 6; r++) {
-					dos.writeUTF(records[i][r]);
-					if (records[i][r] == null)
+					dos.writeUTF(t[r]);
+					if (records[i] == null)
 						break;
 				}
 			}

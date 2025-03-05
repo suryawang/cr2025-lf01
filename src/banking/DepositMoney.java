@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import banking.db.Database;
+import banking.model.Customer;
 
 import java.io.*;
 
@@ -190,9 +191,9 @@ public class DepositMoney extends JInternalFrame implements ActionListener {
 	// Function which display Record from Array onto the Form.
 	public void showRec(int intRec) {
 		var records = db.get(intRec);
-		txtNo.setText(records[0]);
-		txtName.setText(records[1]);
-		curr = Integer.parseInt(records[5]);
+		txtNo.setText(records.getNo());
+		txtName.setText(records.getName());
+		curr = records.getBalance();
 		recCount = intRec;
 	}
 
@@ -210,8 +211,8 @@ public class DepositMoney extends JInternalFrame implements ActionListener {
 	public void editRec() {
 
 		deposit = Integer.parseInt(txtDeposit.getText());
-		db.set(recCount, txtNo.getText(), txtName.getText(), "" + cboMonth.getSelectedItem(),
-				"" + cboDay.getSelectedItem(), "" + cboYear.getSelectedItem(), "" + (curr + deposit));
+		db.set(recCount, Customer.fromUi( txtNo.getText(), txtName.getText(), "" + cboMonth.getSelectedItem(),
+				"" + cboDay.getSelectedItem(), "" + cboYear.getSelectedItem(), "" + (curr + deposit)));
 		editFile(); // Save This Array to File.
 
 	}

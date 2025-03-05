@@ -632,11 +632,11 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		String data;
 		String data0 = "               BankSystem [Pvt] Limited.               \n"; // Page Title.
 		String data1 = "               Customer Balance Report.              \n\n"; // Page Header.
-		String data2 = "  Account No.:       " + records[0] + "\n";
-		String data3 = "  Customer Name:     " + records[1] + "\n";
-		String data4 = "  Last Transaction:  " + records[2] + ", " + records[3] + ", " + records[4]
+		String data2 = "  Account No.:       " + records.getNo() + "\n";
+		String data3 = "  Customer Name:     " + records.getName() + "\n";
+		String data4 = "  Last Transaction:  " + records.getDate()
 				+ "\n";
-		String data5 = "  Current Balance:   " + records[5] + "\n\n";
+		String data5 = "  Current Balance:   " + records.getBalance() + "\n\n";
 		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n"; // Page Footer.
 		String sep0 = " -----------------------------------------------------------\n";
 		String sep1 = " -----------------------------------------------------------\n";

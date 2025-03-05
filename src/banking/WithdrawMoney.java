@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import banking.db.Database;
+import banking.model.Customer;
 
 import java.io.*;
 
@@ -201,9 +202,9 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	// Function which display Record from Array onto the Form.
 	public void showRec(int intRec) {
 		var records = db.get(intRec);
-		txtNo.setText(records[0]);
-		txtName.setText(records[1]);
-		curr = Integer.parseInt(records[5]);
+		txtNo.setText(records.getNo());
+		txtName.setText(records.getName());
+		curr = records.getBalance();
 		recCount = intRec;
 	}
 
@@ -219,8 +220,8 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 
 	// Function use to Edit an Element's Value of the Array.
 	public void editRec() {
-		db.set(recCount, txtNo.getText(), txtName.getText(), "" + cboMonth.getSelectedItem(),
-				"" + cboDay.getSelectedItem(), "" + cboYear.getSelectedItem(), "" + (curr - withdraw));
+		db.set(recCount, Customer.fromUi( txtNo.getText(), txtName.getText(), "" + cboMonth.getSelectedItem(),
+				"" + cboDay.getSelectedItem(), "" + cboYear.getSelectedItem(), "" + (curr - withdraw)));
 		editFile(); // Save This Array to File.
 	}
 

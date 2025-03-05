@@ -59,10 +59,10 @@ public class ViewCustomer extends JInternalFrame {
 			rowData = new String[total][4];
 			for (int i = 0; i < total; i++) {
 				var rows = db.get(i);
-				rowData[i][0] = rows[0];
-				rowData[i][1] = rows[1];
-				rowData[i][2] = rows[2] + ", " + rows[3] + ", " + rows[4];
-				rowData[i][3] = rows[5];
+				rowData[i][0] = rows.getNo();
+				rowData[i][1] = rows.getName();
+				rowData[i][2] = rows.getDate();
+				rowData[i][3] = rows.getBalance()+"";
 			}
 		}
 	}

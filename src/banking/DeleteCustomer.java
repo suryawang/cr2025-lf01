@@ -154,10 +154,10 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 	// Function which display Record from Array onto the Form.
 	void showRec(int intRec) {
 		var records = db.get(intRec);
-		txtNo.setText(records[0]);
-		txtName.setText(records[1]);
-		txtDate.setText(records[2] + ", " + records[3] + ", " + records[4]);
-		txtBal.setText(records[5]);
+		txtNo.setText(records.getNo());
+		txtName.setText(records.getName());
+		txtDate.setText(records.getDate());
+		txtBal.setText(records.getBalance()+"");
 		recCount = intRec;
 
 	}
