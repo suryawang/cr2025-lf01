@@ -1,4 +1,5 @@
 package banking;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,100 +12,100 @@ import javax.swing.plaf.metal.*;
 
 public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
-	//Main Place on Form where All Child Forms will Shown.
-	private JDesktopPane desktop = new JDesktopPane ();
+	// Main Place on Form where All Child Forms will Shown.
+	private JDesktopPane desktop = new JDesktopPane();
 
-	//For Program's MenuBar.
+	// For Program's MenuBar.
 	private JMenuBar bar;
 
-	//All the Main Menu of the Program.
+	// All the Main Menu of the Program.
 	private JMenu mnuFile, mnuEdit, mnuView, mnuOpt, mnuWin, mnuHelp;
 
-	private JMenuItem addNew, printRec, end;				//File Menu Options.
-	private	JMenuItem  deposit, withdraw, delRec, search, searchName;	//Edit Menu Options.
-	private	JMenuItem oneByOne, allCustomer;				//View Menu Options.
-	private	JMenuItem change, style, theme;					//Option Menu Options.
-	private JMenuItem close, closeAll;					//Window Menu Options.
-	private	JMenuItem content, keyHelp, about;				//Help Menu Options.
+	private JMenuItem addNew, printRec, end; // File Menu Options.
+	private JMenuItem deposit, withdraw, delRec, search, searchName; // Edit Menu Options.
+	private JMenuItem oneByOne, allCustomer; // View Menu Options.
+	private JMenuItem change, style, theme; // Option Menu Options.
+	private JMenuItem close, closeAll; // Window Menu Options.
+	private JMenuItem content, keyHelp, about; // Help Menu Options.
 
-	//PopupMenu of Program.
-	private JPopupMenu popMenu = new JPopupMenu ();
+	// PopupMenu of Program.
+	private JPopupMenu popMenu = new JPopupMenu();
 
-	//MenuItems for PopupMenu of the Program.
+	// MenuItems for PopupMenu of the Program.
 	private JMenuItem open, report, dep, with, del, find, all;
 
-	//For Program's ToolBar.
-	private	JToolBar toolBar;
+	// For Program's ToolBar.
+	private JToolBar toolBar;
 
-	//For ToolBar's Button.
-	private	JButton btnNew, btnDep, btnWith, btnRec, btnDel, btnSrch, btnHelp, btnKey;
+	// For ToolBar's Button.
+	private JButton btnNew, btnDep, btnWith, btnRec, btnDel, btnSrch, btnHelp, btnKey;
 
-	//Main Form StatusBar where Program's Name & Welcome Message Display.
-	private JPanel statusBar = new JPanel ();
+	// Main Form StatusBar where Program's Name & Welcome Message Display.
+	private JPanel statusBar = new JPanel();
 
-	//Labels for Displaying Program's Name & saying Welcome to Current User on StatusBar.
+	// Labels for Displaying Program's Name & saying Welcome to Current User on
+	// StatusBar.
 	private JLabel welcome;
 	private JLabel author;
 
-	//Making the LookAndFeel Menu.
-	private String strings[] = {"1. Metal", "2. Motif", "3. Windows"};
-	private UIManager.LookAndFeelInfo looks[] = UIManager.getInstalledLookAndFeels ();
-	private ButtonGroup group = new ButtonGroup ();
+	// Making the LookAndFeel Menu.
+	private String strings[] = { "1. Metal", "2. Motif", "3. Windows" };
+	private UIManager.LookAndFeelInfo looks[] = UIManager.getInstalledLookAndFeels();
+	private ButtonGroup group = new ButtonGroup();
 	private JRadioButtonMenuItem radio[] = new JRadioButtonMenuItem[strings.length];
 
-	//Getting the Current System Date.
-	private java.util.Date currDate = new java.util.Date ();
-	private SimpleDateFormat sdf = new SimpleDateFormat ("dd MMMM yyyy", Locale.getDefault());
-	private String d = sdf.format (currDate);
+	// Getting the Current System Date.
+	private java.util.Date currDate = new java.util.Date();
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+	private String d = sdf.format(currDate);
 
-	//Following all Variables are use in BankSystem's IO's.
+	// Following all Variables are use in BankSystem's IO's.
 
-	//Variable use in Reading the BankSystem Records File & Store it in an Array.
+	// Variable use in Reading the BankSystem Records File & Store it in an Array.
 	private int count = 0;
 	private int rows = 0;
-	private	int total = 0;
+	private int total = 0;
 
-	//String Type Array use to Load Records From File.
-	private String records[][] = new String [500][6];
+	// String Type Array use to Load Records From File.
+	private String records[][] = new String[500][6];
 
-	//Variable for Reading the BankSystem Records File.
+	// Variable for Reading the BankSystem Records File.
 	private FileInputStream fis;
 	private DataInputStream dis;
 
-	//Constructor of The Bank Program to Iniatilize all Variables of Program.
+	// Constructor of The Bank Program to Iniatilize all Variables of Program.
 
-	public BankSystem () {
+	public BankSystem() {
 
-		//Setting Program's Title.
-		super ("BankSystem [Pvt] Limited.");
+		// Setting Program's Title.
+		super("BankSystem [Pvt] Limited.");
 
-		UIManager.addPropertyChangeListener (new UISwitchListener ((JComponent)getRootPane()));
+		UIManager.addPropertyChangeListener(new UISwitchListener((JComponent) getRootPane()));
 
-		//Creating the MenuBar.
-		bar = new JMenuBar ();
+		// Creating the MenuBar.
+		bar = new JMenuBar();
 
-		//Setting the Main Window of Program.
-		//setIconImage (getToolkit().getImage ("Images/Bank.gif")));
-		setIconImage (new ImageIcon(ClassLoader.getSystemResource ("Images/Bank.gif")).getImage());
-		
-		setSize (700, 550);
-		setJMenuBar (bar);
+		// Setting the Main Window of Program.
+		// setIconImage (getToolkit().getImage ("Images/Bank.gif")));
+		setIconImage(new ImageIcon(ClassLoader.getSystemResource("Images/Bank.gif")).getImage());
 
-		//Closing Code of Main Window.
-		addWindowListener (new WindowAdapter () {
-			public void windowClosing (WindowEvent we) {
-				quitApp ();
+		setSize(700, 550);
+		setJMenuBar(bar);
+
+		// Closing Code of Main Window.
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent we) {
+				quitApp();
 			}
-		}
-		);
+		});
 
-		//Setting the Location of Application on Screen.
-		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getWidth()) / 2,
-			(Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2);
+		// Setting the Location of Application on Screen.
+		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getWidth()) / 2,
+				(Toolkit.getDefaultToolkit().getScreenSize().height - getHeight()) / 2);
 
 		createMenuBarItems();
 
-		//Creating the MenuItems of Program.
+		// Creating the MenuItems of Program.
 		createMenuItemsForFileMenu();
 		createMenuItemsForEditMenu();
 		createMenuItemsForViewMenu();
@@ -112,478 +113,471 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		createMenuItemsForWindowMenu();
 		createMenuItemsForHelpMenu();
 
-		//Adding MenuItems to Menu.
-	
-		//File Menu Items.
-		mnuFile.add (addNew);
-		mnuFile.addSeparator ();
-		mnuFile.add (printRec);
-		mnuFile.addSeparator ();
-		mnuFile.add (end);
+		// Adding MenuItems to Menu.
 
-		//Edit Menu Items.
-		mnuEdit.add (deposit);
-		mnuEdit.add (withdraw);
-		mnuEdit.addSeparator ();
-		mnuEdit.add (delRec);
-		mnuEdit.addSeparator ();
-		mnuEdit.add (search);
-		mnuEdit.add (searchName);
+		// File Menu Items.
+		mnuFile.add(addNew);
+		mnuFile.addSeparator();
+		mnuFile.add(printRec);
+		mnuFile.addSeparator();
+		mnuFile.add(end);
 
-		//View Menu Items.
-		mnuView.add (oneByOne);
-		mnuView.addSeparator ();
-		mnuView.add (allCustomer);
+		// Edit Menu Items.
+		mnuEdit.add(deposit);
+		mnuEdit.add(withdraw);
+		mnuEdit.addSeparator();
+		mnuEdit.add(delRec);
+		mnuEdit.addSeparator();
+		mnuEdit.add(search);
+		mnuEdit.add(searchName);
 
-		//Options Menu Items.
-		mnuOpt.add (change);
-		mnuOpt.addSeparator ();
-		mnuOpt.add (style);
-		mnuOpt.addSeparator ();
-		mnuOpt.add (theme);
+		// View Menu Items.
+		mnuView.add(oneByOne);
+		mnuView.addSeparator();
+		mnuView.add(allCustomer);
 
-		//Window Menu Items.
-		mnuWin.add (close);
-		mnuWin.add (closeAll);
+		// Options Menu Items.
+		mnuOpt.add(change);
+		mnuOpt.addSeparator();
+		mnuOpt.add(style);
+		mnuOpt.addSeparator();
+		mnuOpt.add(theme);
 
-		//Help Menu Items.
-		mnuHelp.add (content);
-		mnuHelp.addSeparator ();
-		mnuHelp.add (keyHelp);
-		mnuHelp.addSeparator ();
-		mnuHelp.add (about);
+		// Window Menu Items.
+		mnuWin.add(close);
+		mnuWin.add(closeAll);
 
-		//Adding Menues to Bar.
-		bar.add (mnuFile);
-		bar.add (mnuEdit);
-		bar.add (mnuView);
-		bar.add (mnuOpt);
-		bar.add (mnuWin);
-		bar.add (mnuHelp);
+		// Help Menu Items.
+		mnuHelp.add(content);
+		mnuHelp.addSeparator();
+		mnuHelp.add(keyHelp);
+		mnuHelp.addSeparator();
+		mnuHelp.add(about);
 
-		//MenuItems for PopupMenu.
-		open = new JMenuItem ("Open New Account", new ImageIcon (ClassLoader.getSystemResource("Images/Open.gif")));
-		open.addActionListener (this);
-		report = new JMenuItem ("Print BankSystem Report", new ImageIcon (ClassLoader.getSystemResource("Images/New.gif")));
-		report.addActionListener (this);
-		dep = new JMenuItem ("Deposit Money");
-		dep.addActionListener (this);
-		with = new JMenuItem ("Withdraw Money");
-		with.addActionListener (this);
-		del = new JMenuItem ("Delete Customer", new ImageIcon (ClassLoader.getSystemResource("Images/Delete.gif")));
-		del.addActionListener (this);
-		find = new JMenuItem ("Search Customer", new ImageIcon (ClassLoader.getSystemResource("Images/find.gif")));
-		find.addActionListener (this);
-		all = new JMenuItem ("View All Customer", new ImageIcon (ClassLoader.getSystemResource("Images/refresh.gif")));
-		all.addActionListener (this);
+		// Adding Menues to Bar.
+		bar.add(mnuFile);
+		bar.add(mnuEdit);
+		bar.add(mnuView);
+		bar.add(mnuOpt);
+		bar.add(mnuWin);
+		bar.add(mnuHelp);
 
-		//Adding Menues to PopupMenu.
-		popMenu.add (open);
-		popMenu.add (report);
-		popMenu.add (dep);
-		popMenu.add (with);
-		popMenu.add (del);
-		popMenu.add (find);
-		popMenu.add (all);
+		// MenuItems for PopupMenu.
+		open = new JMenuItem("Open New Account", new ImageIcon(ClassLoader.getSystemResource("Images/Open.gif")));
+		open.addActionListener(this);
+		report = new JMenuItem("Print BankSystem Report",
+				new ImageIcon(ClassLoader.getSystemResource("Images/New.gif")));
+		report.addActionListener(this);
+		dep = new JMenuItem("Deposit Money");
+		dep.addActionListener(this);
+		with = new JMenuItem("Withdraw Money");
+		with.addActionListener(this);
+		del = new JMenuItem("Delete Customer", new ImageIcon(ClassLoader.getSystemResource("Images/Delete.gif")));
+		del.addActionListener(this);
+		find = new JMenuItem("Search Customer", new ImageIcon(ClassLoader.getSystemResource("Images/find.gif")));
+		find.addActionListener(this);
+		all = new JMenuItem("View All Customer", new ImageIcon(ClassLoader.getSystemResource("Images/refresh.gif")));
+		all.addActionListener(this);
 
-		//Following Procedure display the PopupMenu of Program.
-		addMouseListener (new MouseAdapter () {
-			public void mousePressed (MouseEvent me) { checkMouseTrigger (me); }
-			public void mouseReleased (MouseEvent me) { checkMouseTrigger (me); }
-			private void checkMouseTrigger (MouseEvent me) {
-				if (me.isPopupTrigger ())
-					popMenu.show (me.getComponent (), me.getX (), me.getY ());
+		// Adding Menues to PopupMenu.
+		popMenu.add(open);
+		popMenu.add(report);
+		popMenu.add(dep);
+		popMenu.add(with);
+		popMenu.add(del);
+		popMenu.add(find);
+		popMenu.add(all);
+
+		// Following Procedure display the PopupMenu of Program.
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				checkMouseTrigger(me);
 			}
-		}
-		);
-		
-		//Creating the ToolBar's Buttons of Program.
-		btnNew = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/NotePad.gif")));
-		btnNew.setToolTipText ("Create New Account");
-		btnNew.addActionListener (this);
-		btnDep = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/ImationDisk.gif")));
-		btnDep.setToolTipText ("Deposit Money");
-		btnDep.addActionListener (this);
-		btnWith = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/SuperDisk.gif")));
-		btnWith.setToolTipText ("Withdraw Money");
-		btnWith.addActionListener (this);
-		btnRec = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/Paproll.gif")));
-		btnRec.setToolTipText ("Print Customer Balance");
-		btnRec.addActionListener (this);
-		btnDel = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/Toaster.gif")));
-		btnDel.setToolTipText ("Delete Customer");
-		btnDel.addActionListener (this);
-		btnSrch = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/Search.gif")));
-		btnSrch.setToolTipText ("Search Customer");
-		btnSrch.addActionListener (this);
-		btnHelp = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/Help.gif")));
-		btnHelp.setToolTipText ("Help on Bank System");
-		btnHelp.addActionListener (this);
-		btnKey = new JButton (new ImageIcon (ClassLoader.getSystemResource("Images/Keys.gif")));
-		btnKey.setToolTipText ("Shortcut Keys of BankSystem");
-		btnKey.addActionListener (this);
 
-		//Creating the ToolBar of Program.
-		toolBar = new JToolBar ();
-		toolBar.add (btnNew);
-		toolBar.addSeparator ();
-		toolBar.add (btnDep);
-		toolBar.add (btnWith);
-		toolBar.addSeparator ();
-		toolBar.add (btnRec);
-		toolBar.addSeparator ();
-		toolBar.add (btnDel);
-		toolBar.addSeparator ();
-		toolBar.add (btnSrch);
-		toolBar.addSeparator ();
-		toolBar.add (btnHelp);
-		toolBar.add (btnKey);
+			public void mouseReleased(MouseEvent me) {
+				checkMouseTrigger(me);
+			}
 
-		//Creating the StatusBar of Program.
-		author = new JLabel (" " + "BankSystem [Pvt] Limited.", Label.LEFT);
-		author.setForeground (Color.black);
-		author.setToolTipText ("Program's Title");
-		welcome = new JLabel ("Welcome Today is " + d + " ", JLabel.RIGHT);
-		welcome.setForeground (Color.black);
-		welcome.setToolTipText ("Welcoming the User & System Current Date");
-		statusBar.setLayout (new BorderLayout());
-		statusBar.add (author, BorderLayout.WEST);
-		statusBar.add (welcome, BorderLayout.EAST);
+			private void checkMouseTrigger(MouseEvent me) {
+				if (me.isPopupTrigger())
+					popMenu.show(me.getComponent(), me.getX(), me.getY());
+			}
+		});
 
-		//For Making the Dragging Speed of Internal Frames Faster.
-		desktop.putClientProperty ("JDesktopPane.dragMode", "outline");
+		// Creating the ToolBar's Buttons of Program.
+		btnNew = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/NotePad.gif")));
+		btnNew.setToolTipText("Create New Account");
+		btnNew.addActionListener(this);
+		btnDep = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/ImationDisk.gif")));
+		btnDep.setToolTipText("Deposit Money");
+		btnDep.addActionListener(this);
+		btnWith = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/SuperDisk.gif")));
+		btnWith.setToolTipText("Withdraw Money");
+		btnWith.addActionListener(this);
+		btnRec = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/Paproll.gif")));
+		btnRec.setToolTipText("Print Customer Balance");
+		btnRec.addActionListener(this);
+		btnDel = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/Toaster.gif")));
+		btnDel.setToolTipText("Delete Customer");
+		btnDel.addActionListener(this);
+		btnSrch = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/Search.gif")));
+		btnSrch.setToolTipText("Search Customer");
+		btnSrch.addActionListener(this);
+		btnHelp = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/Help.gif")));
+		btnHelp.setToolTipText("Help on Bank System");
+		btnHelp.addActionListener(this);
+		btnKey = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/Keys.gif")));
+		btnKey.setToolTipText("Shortcut Keys of BankSystem");
+		btnKey.addActionListener(this);
 
-		//Setting the Contents of Programs.
-		getContentPane().add (toolBar, BorderLayout.NORTH);
-		getContentPane().add (desktop, BorderLayout.CENTER);
-		getContentPane().add (statusBar, BorderLayout.SOUTH);
+		// Creating the ToolBar of Program.
+		toolBar = new JToolBar();
+		toolBar.add(btnNew);
+		toolBar.addSeparator();
+		toolBar.add(btnDep);
+		toolBar.add(btnWith);
+		toolBar.addSeparator();
+		toolBar.add(btnRec);
+		toolBar.addSeparator();
+		toolBar.add(btnDel);
+		toolBar.addSeparator();
+		toolBar.add(btnSrch);
+		toolBar.addSeparator();
+		toolBar.add(btnHelp);
+		toolBar.add(btnKey);
 
-		//Showing The Main Form of Application.
-		setVisible (true);
+		// Creating the StatusBar of Program.
+		author = new JLabel(" " + "BankSystem [Pvt] Limited.", Label.LEFT);
+		author.setForeground(Color.black);
+		author.setToolTipText("Program's Title");
+		welcome = new JLabel("Welcome Today is " + d + " ", JLabel.RIGHT);
+		welcome.setForeground(Color.black);
+		welcome.setToolTipText("Welcoming the User & System Current Date");
+		statusBar.setLayout(new BorderLayout());
+		statusBar.add(author, BorderLayout.WEST);
+		statusBar.add(welcome, BorderLayout.EAST);
+
+		// For Making the Dragging Speed of Internal Frames Faster.
+		desktop.putClientProperty("JDesktopPane.dragMode", "outline");
+
+		// Setting the Contents of Programs.
+		getContentPane().add(toolBar, BorderLayout.NORTH);
+		getContentPane().add(desktop, BorderLayout.CENTER);
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+
+		// Showing The Main Form of Application.
+		setVisible(true);
 
 	}
 
 	private void createMenuItemsForHelpMenu() {
-		content = new JMenuItem ("Help Contents", new ImageIcon (ClassLoader.getSystemResource("Images/paste.gif")));
-		content.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_H, Event.CTRL_MASK));
-		content.setMnemonic ((int)'H');
-		content.addActionListener (this);
-		keyHelp = new JMenuItem ("Help on Shortcuts...");
-		keyHelp.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
-		keyHelp.setMnemonic ((int)'K');
-		keyHelp.addActionListener (this);
-		about = new JMenuItem ("About BankSystem", new ImageIcon (ClassLoader.getSystemResource("Images/Save.gif")));
-		about.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
-		about.setMnemonic ((int)'C');
-		about.addActionListener (this);
+		content = new JMenuItem("Help Contents", new ImageIcon(ClassLoader.getSystemResource("Images/paste.gif")));
+		content.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, Event.CTRL_MASK));
+		content.setMnemonic((int) 'H');
+		content.addActionListener(this);
+		keyHelp = new JMenuItem("Help on Shortcuts...");
+		keyHelp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
+		keyHelp.setMnemonic((int) 'K');
+		keyHelp.addActionListener(this);
+		about = new JMenuItem("About BankSystem", new ImageIcon(ClassLoader.getSystemResource("Images/Save.gif")));
+		about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+		about.setMnemonic((int) 'C');
+		about.addActionListener(this);
 	}
 
 	private void createMenuItemsForWindowMenu() {
-		close = new JMenuItem ("Close Active Window");
-		close.setMnemonic ((int)'C');
-		close.addActionListener (this);
-		closeAll = new JMenuItem ("Close All Windows...");
-		closeAll.setMnemonic ((int)'A');
-		closeAll.addActionListener (this);
+		close = new JMenuItem("Close Active Window");
+		close.setMnemonic((int) 'C');
+		close.addActionListener(this);
+		closeAll = new JMenuItem("Close All Windows...");
+		closeAll.setMnemonic((int) 'A');
+		closeAll.addActionListener(this);
 	}
 
 	private void createMenuItemsForOptionMenu() {
-		change = new JMenuItem ("Change Background Color");
-		change.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK));
-		change.setMnemonic ((int)'B');
-		change.addActionListener (this);
-		//Menu For Changing the Program's Layout.
-		style = new JMenu ("Change Layout Style");
-		style.setMnemonic ((int)'L');
-		for( int i = 0; i < radio.length ; i++ ) {			//Creating the subMenus of Style Menu.
-			radio[i] = new JRadioButtonMenuItem (strings[i]);	//Build an Array of Layouts to Apply.
-			radio[i].addItemListener (this);			//Setting their Actions.
-			group.add (radio[i]);					//Making them Grouped.
-			style.add (radio[i]);					//Adding to Style MenuOption.
+		change = new JMenuItem("Change Background Color");
+		change.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK));
+		change.setMnemonic((int) 'B');
+		change.addActionListener(this);
+		// Menu For Changing the Program's Layout.
+		style = new JMenu("Change Layout Style");
+		style.setMnemonic((int) 'L');
+		for (int i = 0; i < radio.length; i++) { // Creating the subMenus of Style Menu.
+			radio[i] = new JRadioButtonMenuItem(strings[i]); // Build an Array of Layouts to Apply.
+			radio[i].addItemListener(this); // Setting their Actions.
+			group.add(radio[i]); // Making them Grouped.
+			style.add(radio[i]); // Adding to Style MenuOption.
 		}
-		//SubMenu of Theme For Applying different Themes to Program By Building an Array of Themes to Apply.
-		MetalTheme[] themes = { new DefaultMetalTheme(), new GreenTheme(), new AquaTheme(), 
-					new SandTheme(), new SolidTheme(), new MilkyTheme(), new GrayTheme() };
-		theme = new MetalThemeMenu ("Apply Theme", themes);		//Putting the Themes in ThemeMenu.
-		theme.setMnemonic ((int)'M');
+		// SubMenu of Theme For Applying different Themes to Program By Building an
+		// Array of Themes to Apply.
+		MetalTheme[] themes = { new DefaultMetalTheme(), new GreenTheme(), new AquaTheme(), new SandTheme(),
+				new SolidTheme(), new MilkyTheme(), new GrayTheme() };
+		theme = new MetalThemeMenu("Apply Theme", themes); // Putting the Themes in ThemeMenu.
+		theme.setMnemonic((int) 'M');
 	}
 
 	private void createMenuItemsForViewMenu() {
-		oneByOne = new JMenuItem ("View One By One");
-		oneByOne.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
-		oneByOne.setMnemonic ((int)'O');	
-		oneByOne.addActionListener (this);
-		allCustomer = new JMenuItem ("View All Customer", new ImageIcon (ClassLoader.getSystemResource("Images/refresh.gif")));
-		allCustomer.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
-		allCustomer.setMnemonic ((int)'A');
-		allCustomer.addActionListener (this);
+		oneByOne = new JMenuItem("View One By One");
+		oneByOne.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
+		oneByOne.setMnemonic((int) 'O');
+		oneByOne.addActionListener(this);
+		allCustomer = new JMenuItem("View All Customer",
+				new ImageIcon(ClassLoader.getSystemResource("Images/refresh.gif")));
+		allCustomer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+		allCustomer.setMnemonic((int) 'A');
+		allCustomer.addActionListener(this);
 	}
 
 	private void createMenuItemsForEditMenu() {
-		deposit = new JMenuItem ("Deposit Money");
-		deposit.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
-		deposit.setMnemonic ((int)'T');
-		deposit.addActionListener (this);
-		withdraw = new JMenuItem ("Withdraw Money");
-		withdraw.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_W, Event.CTRL_MASK));
-		withdraw.setMnemonic ((int)'W');	
-		withdraw.addActionListener (this);
-		delRec = new JMenuItem ("Delete Customer", new ImageIcon (ClassLoader.getSystemResource("Images/Delete.gif")));
-		delRec.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK));
-		delRec.setMnemonic ((int)'D');
-		delRec.addActionListener (this);
-		search = new JMenuItem ("Search By No.", new ImageIcon (ClassLoader.getSystemResource("Images/find.gif")));
-		search.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
-		search.setMnemonic ((int)'S');	
-		search.addActionListener (this);
-		searchName = new JMenuItem ("Search By Name");
-		searchName.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
-		searchName.setMnemonic ((int)'M');
-		searchName.addActionListener (this);
+		deposit = new JMenuItem("Deposit Money");
+		deposit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
+		deposit.setMnemonic((int) 'T');
+		deposit.addActionListener(this);
+		withdraw = new JMenuItem("Withdraw Money");
+		withdraw.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Event.CTRL_MASK));
+		withdraw.setMnemonic((int) 'W');
+		withdraw.addActionListener(this);
+		delRec = new JMenuItem("Delete Customer", new ImageIcon(ClassLoader.getSystemResource("Images/Delete.gif")));
+		delRec.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Event.CTRL_MASK));
+		delRec.setMnemonic((int) 'D');
+		delRec.addActionListener(this);
+		search = new JMenuItem("Search By No.", new ImageIcon(ClassLoader.getSystemResource("Images/find.gif")));
+		search.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
+		search.setMnemonic((int) 'S');
+		search.addActionListener(this);
+		searchName = new JMenuItem("Search By Name");
+		searchName.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
+		searchName.setMnemonic((int) 'M');
+		searchName.addActionListener(this);
 	}
 
 	private void createMenuItemsForFileMenu() {
-		addNew = new JMenuItem ("Open New Account", new ImageIcon (ClassLoader.getSystemResource("Images/Open.gif")));
-		addNew.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK));
-		addNew.setMnemonic ((int)'N');
-		addNew.addActionListener (this);
-		printRec = new JMenuItem ("Print Customer Balance", new ImageIcon (ClassLoader.getSystemResource("Images/New.gif")));
-		printRec.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK));
-		printRec.setMnemonic ((int)'R');
-		printRec.addActionListener (this);
-		end = new JMenuItem ("Quit BankSystem ?", new ImageIcon (ClassLoader.getSystemResource("Images/export.gif")));
-		end.setAccelerator (KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
-		end.setMnemonic ((int)'Q');	
-		end.addActionListener (this);
+		addNew = new JMenuItem("Open New Account", new ImageIcon(ClassLoader.getSystemResource("Images/Open.gif")));
+		addNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK));
+		addNew.setMnemonic((int) 'N');
+		addNew.addActionListener(this);
+		printRec = new JMenuItem("Print Customer Balance",
+				new ImageIcon(ClassLoader.getSystemResource("Images/New.gif")));
+		printRec.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK));
+		printRec.setMnemonic((int) 'R');
+		printRec.addActionListener(this);
+		end = new JMenuItem("Quit BankSystem ?", new ImageIcon(ClassLoader.getSystemResource("Images/export.gif")));
+		end.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
+		end.setMnemonic((int) 'Q');
+		end.addActionListener(this);
 	}
 
 	private void createMenuBarItems() {
-		mnuFile = new JMenu ("File");
-		mnuFile.setMnemonic ((int)'F');
-		mnuEdit = new JMenu ("Edit");
-		mnuEdit.setMnemonic ((int)'E');
-		mnuView = new JMenu ("View");
-		mnuView.setMnemonic ((int)'V');
-		mnuOpt = new JMenu ("Options");
-		mnuOpt.setMnemonic ((int)'O');
-		mnuWin = new JMenu ("Window");
-		mnuWin.setMnemonic ((int)'W');
-		mnuHelp = new JMenu ("Help");
-		mnuHelp.setMnemonic ((int)'H');
+		mnuFile = new JMenu("File");
+		mnuFile.setMnemonic((int) 'F');
+		mnuEdit = new JMenu("Edit");
+		mnuEdit.setMnemonic((int) 'E');
+		mnuView = new JMenu("View");
+		mnuView.setMnemonic((int) 'V');
+		mnuOpt = new JMenu("Options");
+		mnuOpt.setMnemonic((int) 'O');
+		mnuWin = new JMenu("Window");
+		mnuWin.setMnemonic((int) 'W');
+		mnuHelp = new JMenu("Help");
+		mnuHelp.setMnemonic((int) 'H');
 	}
 
-	//Function For Performing different Actions By Menus of Program.
+	// Function For Performing different Actions By Menus of Program.
 
-	public void actionPerformed (ActionEvent ae) {
-	
+	public void actionPerformed(ActionEvent ae) {
+
 		Object obj = ae.getSource();
 
 		if (obj == addNew || obj == open || obj == btnNew) {
 
-			boolean b = openChildWindow ("Create New Account");
+			boolean b = openChildWindow("Create New Account");
 			if (b == false) {
-				NewAccount newAcc = new NewAccount ();
-				desktop.add (newAcc);
-				newAcc.show ();
+				NewAccount newAcc = new NewAccount();
+				desktop.add(newAcc);
+				newAcc.show();
 			}
 
-		}
-		else if (obj == printRec || obj == btnRec || obj == report) {
+		} else if (obj == printRec || obj == btnRec || obj == report) {
 
-			getAccountNo ();
+			getAccountNo();
 
-		}
-		else if (obj == end) {
+		} else if (obj == end) {
 
-			quitApp ();
+			quitApp();
 
-		}
-		else if (obj == deposit || obj == dep || obj == btnDep) {
+		} else if (obj == deposit || obj == dep || obj == btnDep) {
 
-			boolean b = openChildWindow ("Deposit Money");
+			boolean b = openChildWindow("Deposit Money");
 			if (b == false) {
-				DepositMoney depMon = new DepositMoney ();
-				desktop.add (depMon);
-				depMon.show ();
+				DepositMoney depMon = new DepositMoney();
+				desktop.add(depMon);
+				depMon.show();
 			}
 
-		}
-		else if (obj == withdraw || obj == with || obj == btnWith) {
+		} else if (obj == withdraw || obj == with || obj == btnWith) {
 
-			boolean b = openChildWindow ("Withdraw Money");
+			boolean b = openChildWindow("Withdraw Money");
 			if (b == false) {
-				WithdrawMoney withMon = new WithdrawMoney ();
-				desktop.add (withMon);
-				withMon.show ();
+				WithdrawMoney withMon = new WithdrawMoney();
+				desktop.add(withMon);
+				withMon.show();
 			}
 
-		}
-		else if (obj == delRec || obj == del || obj == btnDel) {
+		} else if (obj == delRec || obj == del || obj == btnDel) {
 
-			boolean b = openChildWindow ("Delete Account Holder");
+			boolean b = openChildWindow("Delete Account Holder");
 			if (b == false) {
-				DeleteCustomer delCus = new DeleteCustomer ();
-				desktop.add (delCus);
-				delCus.show ();
+				DeleteCustomer delCus = new DeleteCustomer();
+				desktop.add(delCus);
+				delCus.show();
 			}
 
-		}
-		else if (obj == search || obj == find || obj == btnSrch) {
+		} else if (obj == search || obj == find || obj == btnSrch) {
 
-			boolean b = openChildWindow ("Search Customer [By No.]");
+			boolean b = openChildWindow("Search Customer [By No.]");
 			if (b == false) {
-				FindAccount fndAcc = new FindAccount ();
-				desktop.add (fndAcc);
-				fndAcc.show ();
+				FindAccount fndAcc = new FindAccount();
+				desktop.add(fndAcc);
+				fndAcc.show();
 			}
 
-		}
-		else if (obj == searchName) {
+		} else if (obj == searchName) {
 
-			boolean b = openChildWindow ("Search Customer [By Name]");
+			boolean b = openChildWindow("Search Customer [By Name]");
 			if (b == false) {
-				FindName fndNm = new FindName ();
-				desktop.add (fndNm);
-				fndNm.show ();
+				FindName fndNm = new FindName();
+				desktop.add(fndNm);
+				fndNm.show();
 			}
 
-		}
-		else if (obj == oneByOne) {
+		} else if (obj == oneByOne) {
 
-			boolean b = openChildWindow ("View Account Holders");
+			boolean b = openChildWindow("View Account Holders");
 			if (b == false) {
-				ViewOne vwOne = new ViewOne ();
-				desktop.add (vwOne);
-				vwOne.show ();
+				ViewOne vwOne = new ViewOne();
+				desktop.add(vwOne);
+				vwOne.show();
 			}
 
-		}
-		else if (obj == allCustomer || obj == all) {
+		} else if (obj == allCustomer || obj == all) {
 
-			boolean b = openChildWindow ("View All Account Holders");
+			boolean b = openChildWindow("View All Account Holders");
 			if (b == false) {
-				ViewCustomer viewCus = new ViewCustomer ();
-				desktop.add (viewCus);
-				viewCus.show ();
+				ViewCustomer viewCus = new ViewCustomer();
+				desktop.add(viewCus);
+				viewCus.show();
 			}
 
-		}
-		else if (obj == change) {
+		} else if (obj == change) {
 
-			Color cl = new Color (153, 153, 204);
-			cl = JColorChooser.showDialog (this, "Choose Background Color", cl);
-			if (cl == null) { }
-			else {
-				desktop.setBackground (cl);
-				desktop.repaint ();
+			Color cl = new Color(153, 153, 204);
+			cl = JColorChooser.showDialog(this, "Choose Background Color", cl);
+			if (cl == null) {
+			} else {
+				desktop.setBackground(cl);
+				desktop.repaint();
 			}
 
-		}
-		else if (obj == close) {
+		} else if (obj == close) {
 
 			try {
 				desktop.getSelectedFrame().setClosed(true);
+			} catch (Exception CloseExc) {
 			}
-			catch (Exception CloseExc) { }
 
-		}
-		else if (obj == closeAll) {
+		} else if (obj == closeAll) {
 
-			JInternalFrame Frames[] = desktop.getAllFrames (); //Getting all Open Frames.
-			for(int getFrameLoop = 0; getFrameLoop < Frames.length; getFrameLoop++) {
+			JInternalFrame Frames[] = desktop.getAllFrames(); // Getting all Open Frames.
+			for (int getFrameLoop = 0; getFrameLoop < Frames.length; getFrameLoop++) {
 				try {
-	 				Frames[getFrameLoop].setClosed (true); //Close the frame.
-				} 
-				catch (Exception CloseExc) { }	//if we can't close it then we have a problem.
+					Frames[getFrameLoop].setClosed(true); // Close the frame.
+				} catch (Exception CloseExc) {
+				} // if we can't close it then we have a problem.
 			}
 
-		}
-		else if (obj == content || obj == btnHelp) {
+		} else if (obj == content || obj == btnHelp) {
 
-			boolean b = openChildWindow ("BankSystem Help");
+			boolean b = openChildWindow("BankSystem Help");
 			if (b == false) {
-				BankHelp hlpBank = new BankHelp ("BankSystem Help", "Help/Bank.htm");
-				desktop.add (hlpBank);
-				hlpBank.show ();
+				BankHelp hlpBank = new BankHelp("BankSystem Help", "Help/Bank.htm");
+				desktop.add(hlpBank);
+				hlpBank.show();
 			}
 
-		}
-		else if (obj == keyHelp || obj == btnKey) {
+		} else if (obj == keyHelp || obj == btnKey) {
 
-			boolean b = openChildWindow ("BankSystem Keys");
+			boolean b = openChildWindow("BankSystem Keys");
 			if (b == false) {
-				BankHelp hlpKey = new BankHelp ("BankSystem Keys", "Help/Keys.htm");
-				desktop.add (hlpKey);
-				hlpKey.show ();
+				BankHelp hlpKey = new BankHelp("BankSystem Keys", "Help/Keys.htm");
+				desktop.add(hlpKey);
+				hlpKey.show();
 			}
 
-		}
-		else if (obj == about) {
+		} else if (obj == about) {
 
-			String msg = "BankSystem [Pvt] Limited.\n\n" + "Created & Designed By:\n" + 
-				"Muhammad Wasif Javed\n\n" + "E-mail me:\n wasi_javed@hotmail.com";
-			JOptionPane.showMessageDialog (this, msg, "About BankSystem", JOptionPane.PLAIN_MESSAGE);
+			String msg = "BankSystem [Pvt] Limited.\n\n" + "Created & Designed By:\n" + "Muhammad Wasif Javed\n\n"
+					+ "E-mail me:\n wasi_javed@hotmail.com";
+			JOptionPane.showMessageDialog(this, msg, "About BankSystem", JOptionPane.PLAIN_MESSAGE);
 
 		}
 
 	}
 
-	//Function Perform By LookAndFeel Menu.
+	// Function Perform By LookAndFeel Menu.
 
-	public void itemStateChanged (ItemEvent e) {
+	public void itemStateChanged(ItemEvent e) {
 
-		for( int i = 0; i < radio.length; i++ )
-			if(radio[i].isSelected()) {
-				changeLookAndFeel (i);
+		for (int i = 0; i < radio.length; i++)
+			if (radio[i].isSelected()) {
+				changeLookAndFeel(i);
 			}
 
-	}	
+	}
 
-	//Function For Closing the Program.
+	// Function For Closing the Program.
 
-	private void quitApp () {
+	private void quitApp() {
 
 		try {
-			//Show a Confirmation Dialog.
-		    	int reply = JOptionPane.showConfirmDialog (this,
-					"Are you really want to exit\nFrom BankSystem?",
+			// Show a Confirmation Dialog.
+			int reply = JOptionPane.showConfirmDialog(this, "Are you really want to exit\nFrom BankSystem?",
 					"BankSystem - Exit", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-			//Check the User Selection.
+			// Check the User Selection.
 			if (reply == JOptionPane.YES_OPTION) {
-				setVisible (false);	//Hide the Frame.
-				dispose();            	//Free the System Resources.
-				System.out.println ("Thanks for Using BankSystem\nAuthor - Muhammad Wasif Javed");
-				System.exit (0);        //Close the Application.
-			}
-			else if (reply == JOptionPane.NO_OPTION) {
+				setVisible(false); // Hide the Frame.
+				dispose(); // Free the System Resources.
+				System.out.println("Thanks for Using BankSystem\nAuthor - Muhammad Wasif Javed");
+				System.exit(0); // Close the Application.
+			} else if (reply == JOptionPane.NO_OPTION) {
 				setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			}
-		} 
+		}
 
-		catch (Exception e) {}
+		catch (Exception e) {
+		}
 
 	}
 
-	//Function for Changing the Program's Look.
+	// Function for Changing the Program's Look.
 
-	public void changeLookAndFeel (int val) {
+	public void changeLookAndFeel(int val) {
 
 		try {
-			UIManager.setLookAndFeel (looks[val].getClassName());
-			SwingUtilities.updateComponentTreeUI (this);
+			UIManager.setLookAndFeel(looks[val].getClassName());
+			SwingUtilities.updateComponentTreeUI(this);
+		} catch (Exception e) {
 		}
-		catch (Exception e) { }
 
 	}
 
-	//Loop Through All the Opened JInternalFrame to Perform the Task.
+	// Loop Through All the Opened JInternalFrame to Perform the Task.
 
-	private boolean openChildWindow (String title) {
+	private boolean openChildWindow(String title) {
 
-		JInternalFrame[] childs = desktop.getAllFrames ();
+		JInternalFrame[] childs = desktop.getAllFrames();
 		for (int i = 0; i < childs.length; i++) {
-			if (childs[i].getTitle().equalsIgnoreCase (title)) {
-				childs[i].show ();
+			if (childs[i].getTitle().equalsIgnoreCase(title)) {
+				childs[i].show();
 				return true;
 			}
 		}
@@ -591,101 +585,102 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}
 
-	//Following Functions use for Printing Records & Report of BankSystem.
+	// Following Functions use for Printing Records & Report of BankSystem.
 
-	void getAccountNo () {
+	void getAccountNo() {
 
 		String printing;
 		rows = 0;
-		boolean b = populateArray ();
-		if (b == false) { }
-		else {
+		boolean b = populateArray();
+		if (b == false) {
+		} else {
 			try {
-				printing = JOptionPane.showInputDialog (this, "Enter Account No. to Print Customer Balance.\n" +
-				"(Tip: Account No. Contains only Digits)", "BankSystem - PrintRecord", JOptionPane.PLAIN_MESSAGE);
-				if (printing == null) { }
-				if (printing.equals ("")) {
-					JOptionPane.showMessageDialog (this, "Provide Account No. to Print.",
-						 "BankSystem - EmptyField", JOptionPane.PLAIN_MESSAGE);
-					getAccountNo ();
+				printing = JOptionPane.showInputDialog(this,
+						"Enter Account No. to Print Customer Balance.\n" + "(Tip: Account No. Contains only Digits)",
+						"BankSystem - PrintRecord", JOptionPane.PLAIN_MESSAGE);
+				if (printing == null) {
 				}
-				else {
-					findRec (printing);
+				if (printing.equals("")) {
+					JOptionPane.showMessageDialog(this, "Provide Account No. to Print.", "BankSystem - EmptyField",
+							JOptionPane.PLAIN_MESSAGE);
+					getAccountNo();
+				} else {
+					findRec(printing);
 				}
+			} catch (Exception e) {
 			}
-			catch (Exception e) { }
 		}
 
 	}
 
-	//Function use to load all Records from File when Application Execute.
+	// Function use to load all Records from File when Application Execute.
 
-	boolean populateArray () {
+	boolean populateArray() {
 
 		boolean b = false;
 		try {
-			fis = new FileInputStream ("Bank.dat");
-			dis = new DataInputStream (fis);
-			//Loop to Populate the Array.
+			fis = new FileInputStream("Bank.dat");
+			dis = new DataInputStream(fis);
+			// Loop to Populate the Array.
 			while (true) {
 				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF ();
+					records[rows][i] = dis.readUTF();
 				}
 				rows++;
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			total = rows;
 			if (total == 0) {
-				JOptionPane.showMessageDialog (null, "Records File is Empty.\nEnter Records First to Display.",
-					 "BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
+						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
 				b = false;
-			}
-			else {
+			} else {
 				b = true;
 				try {
 					dis.close();
 					fis.close();
+				} catch (Exception exp) {
 				}
-				catch (Exception exp) { }
 			}
 		}
 		return b;
 
 	}
 
-	//Function use to Find Record by Matching the Contents of Records Array with InputBox.
+	// Function use to Find Record by Matching the Contents of Records Array with
+	// InputBox.
 
-	void findRec (String rec) {
+	void findRec(String rec) {
 
 		boolean found = false;
 		for (int x = 0; x < total; x++) {
-			if (records[x][0].equals (rec)) {
+			if (records[x][0].equals(rec)) {
 				found = true;
-				printRecord (makeRecordPrint (x));
+				printRecord(makeRecordPrint(x));
 				break;
 			}
 		}
 		if (found == false) {
-			JOptionPane.showMessageDialog (this, "Account No. " + rec + " doesn't Exist.",
-					 "BankSystem - WrongNo", JOptionPane.PLAIN_MESSAGE);
-			getAccountNo ();
+			JOptionPane.showMessageDialog(this, "Account No. " + rec + " doesn't Exist.", "BankSystem - WrongNo",
+					JOptionPane.PLAIN_MESSAGE);
+			getAccountNo();
 		}
 
 	}
 
-	//Function use to make Current Record ready for Print.
+	// Function use to make Current Record ready for Print.
 
-	String makeRecordPrint (int rec) {
+	String makeRecordPrint(int rec) {
 
 		String data;
-		String data0 = "               BankSystem [Pvt] Limited.               \n";	//Page Title.
-		String data1 = "               Customer Balance Report.              \n\n";	//Page Header.
+		String data0 = "               BankSystem [Pvt] Limited.               \n"; // Page Title.
+		String data1 = "               Customer Balance Report.              \n\n"; // Page Header.
 		String data2 = "  Account No.:       " + records[rec][0] + "\n";
 		String data3 = "  Customer Name:     " + records[rec][1] + "\n";
-		String data4 = "  Last Transaction:  " + records[rec][2] + ", " + records[rec][3] + ", " + records[rec][4] + "\n";
+		String data4 = "  Last Transaction:  " + records[rec][2] + ", " + records[rec][3] + ", " + records[rec][4]
+				+ "\n";
 		String data5 = "  Current Balance:   " + records[rec][5] + "\n\n";
-		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n";	//Page Footer.
+		String data6 = "          Copyright � 2003 Muhammad Wasif Javed.\n"; // Page Footer.
 		String sep0 = " -----------------------------------------------------------\n";
 		String sep1 = " -----------------------------------------------------------\n";
 		String sep2 = " -----------------------------------------------------------\n";
@@ -697,53 +692,52 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 
 	}
 
-	//Function use to Print the Current Record.
+	// Function use to Print the Current Record.
 
-	void printRecord (String rec) {
+	void printRecord(String rec) {
 
-		StringReader sr = new StringReader (rec);
-		LineNumberReader lnr = new LineNumberReader (sr);
-		Font typeface = new Font ("Times New Roman", Font.PLAIN, 12);
-		Properties p = new Properties ();
-		PrintJob pJob = getToolkit().getPrintJob (this, "Print Customer Balance Report", p);
+		StringReader sr = new StringReader(rec);
+		LineNumberReader lnr = new LineNumberReader(sr);
+		Font typeface = new Font("Times New Roman", Font.PLAIN, 12);
+		Properties p = new Properties();
+		PrintJob pJob = getToolkit().getPrintJob(this, "Print Customer Balance Report", p);
 
 		if (pJob != null) {
-			Graphics gr = pJob.getGraphics ();
+			Graphics gr = pJob.getGraphics();
 			if (gr != null) {
-				FontMetrics fm = gr.getFontMetrics (typeface);
+				FontMetrics fm = gr.getFontMetrics(typeface);
 				int margin = 20;
 				int pageHeight = pJob.getPageDimension().height - margin;
-    				int fontHeight = fm.getHeight();
-	    			int fontDescent = fm.getDescent();
-    				int curHeight = margin;
+				int fontHeight = fm.getHeight();
+				int fontDescent = fm.getDescent();
+				int curHeight = margin;
 				String nextLine;
-				gr.setFont (typeface);
+				gr.setFont(typeface);
 
 				try {
 					do {
-						nextLine = lnr.readLine ();
-						if (nextLine != null) {         
-							if ((curHeight + fontHeight) > pageHeight) {	//New Page.
+						nextLine = lnr.readLine();
+						if (nextLine != null) {
+							if ((curHeight + fontHeight) > pageHeight) { // New Page.
 								gr.dispose();
-								gr = pJob.getGraphics ();
+								gr = pJob.getGraphics();
 								curHeight = margin;
-							}							
+							}
 							curHeight += fontHeight;
 							if (gr != null) {
-								gr.setFont (typeface);
-								gr.drawString (nextLine, margin, curHeight - fontDescent);
+								gr.setFont(typeface);
+								gr.drawString(nextLine, margin, curHeight - fontDescent);
 							}
 						}
-					}
-					while (nextLine != null);					
+					} while (nextLine != null);
+				} catch (EOFException eof) {
+				} catch (Throwable t) {
 				}
-				catch (EOFException eof) { }
-				catch (Throwable t) { }
 			}
 			gr.dispose();
 		}
 		if (pJob != null)
-			pJob.end ();
+			pJob.end();
 	}
 
 }
