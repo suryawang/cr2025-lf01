@@ -57,6 +57,12 @@ public class Database {
 				return x;
 		return -1;
 	}
+	public int findRecByName(String name) {
+		for (int x = 0; x < total; x++)
+			if (records[x][1].equalsIgnoreCase(name))
+				return x;
+		return -1;
+	}
 
 	public String[] get(int i) {
 		return records[i];

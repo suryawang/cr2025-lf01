@@ -2,6 +2,9 @@ package banking;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import banking.db.Database;
+
 import java.io.*;
 
 public class FindAccountName extends JInternalFrame implements ActionListener {
@@ -11,15 +14,7 @@ public class FindAccountName extends JInternalFrame implements ActionListener {
 	private JTextField txtNo, txtName, txtDate, txtBal;
 	private JButton btnFind, btnCancel;
 
-	private int count = 0;
-	private int rows = 0;
-	private	int total = 0;
-
-	//String Type Array use to Load Records From File.
-	private String records[][] = new String [500][6];
-
-	private FileInputStream fis;
-	private DataInputStream dis;
+	private Database db = new Database();
 
 	FindAccountName () {
 
@@ -98,7 +93,6 @@ public class FindAccountName extends JInternalFrame implements ActionListener {
 				txtName.requestFocus();
 			}
 			else {
-				rows = 0;
 				populateArray ();	//Load All Existing Records in Memory.
 				findRec ();		//Finding if Account No. Exist or Not.
 			}
@@ -113,48 +107,17 @@ public class FindAccountName extends JInternalFrame implements ActionListener {
 
 	//Function use to load all Records from File when Application Execute.
 	void populateArray () {
-
-		try {
-			fis = new FileInputStream ("Bank.dat");
-			dis = new DataInputStream (fis);
-			//Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF ();
-				}
-				rows++;
-			}
-		}
-		catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
-				JOptionPane.showMessageDialog (null, "Records File is Empty.\nEnter Records First to Display.",
-							"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				btnEnable ();
-			}
-			else {
-				try {
-					dis.close();
-					fis.close();
-				}
-				catch (Exception exp) { }
-			}
-		}
-
+		db.populateArray();
+		if(db.getRows()==0) btnEnable();
 	}
 
 	//Function use to Find Record by Matching the Contents of Records Array with ID TextBox.
 	void findRec () {
+		int fi = db.findRecByName(txtName.getText());
+		if (fi > -1)
+			showRec(fi);
+		else {
 
-		boolean found = false;
-		for (int x = 0; x < total; x++) {
-			if (records[x][1].equalsIgnoreCase (txtName.getText())) {
-				found = true;
-				showRec (x);
-				break;
-			}
-		}
-		if (found == false) {
 			JOptionPane.showMessageDialog (this, "Customer Name " + txtName.getText () + " doesn't Exist.",
 							"BankSystem - WrongNo", JOptionPane.PLAIN_MESSAGE);
 			txtClear ();
@@ -164,11 +127,11 @@ public class FindAccountName extends JInternalFrame implements ActionListener {
 
 	//Function which display Record from Array onto the Form.
 	public void showRec (int intRec) {
-
-		txtNo.setText (records[intRec][0]);
-		txtName.setText (records[intRec][1]);
-		txtDate.setText (records[intRec][2] + ", " + records[intRec][3] + ", " + records[intRec][4]);
-		txtBal.setText (records[intRec][5]);
+		var records = db.get(intRec);
+		txtNo.setText (records[0]);
+		txtName.setText (records[1]);
+		txtDate.setText (records[2] + ", " + records[3] + ", " + records[4]);
+		txtBal.setText (records[5]);
 
 	}
 
