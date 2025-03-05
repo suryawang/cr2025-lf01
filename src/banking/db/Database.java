@@ -13,6 +13,7 @@ public class Database {
 	private DataInputStream dis;
 	private int count = 0;
 	private int rows = 0;
+
 	private int total = 0;
 
 	// String Type Array use to Load Records From File.
@@ -45,6 +46,9 @@ public class Database {
 			}
 		}
 
+	}
+	public int getRows() {
+		return rows;
 	}
 
 	public int findRec(String no) {
