@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import banking_oo.model.Customer;
+import banking_oo.repo.CustomerRepository;
 
 public class ViewCustomer extends JInternalFrame {
 
@@ -19,10 +20,7 @@ public class ViewCustomer extends JInternalFrame {
 	private JTable tbCustomer;
 	private JScrollPane jspTable;
 
-	private Vector<Customer> data = new Vector<>();
-
-	private FileInputStream fis;
-	private DataInputStream dis;
+	private CustomerRepository repo = CustomerRepository.getInstance();
 
 	ViewCustomer() {
 
@@ -31,8 +29,6 @@ public class ViewCustomer extends JInternalFrame {
 		setSize(475, 280);
 
 		jpShow.setLayout(null);
-
-		populateArray();
 
 		tbCustomer = makeTable();
 		jspTable = new JScrollPane(tbCustomer);
@@ -49,39 +45,10 @@ public class ViewCustomer extends JInternalFrame {
 
 	}
 
-	// Function use to load all Records from File when Window Open.
-	void populateArray() {
-
-		try {
-			fis = new FileInputStream("Bank.dat");
-			dis = new DataInputStream(fis);
-			var d = new String[6];
-			// Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					d[i] = dis.readUTF();
-				}
-				data.add(Customer.createCustomerFromDb(d));
-			}
-		} catch (Exception ex) {
-			if (data.size() == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-			}
-			try {
-				dis.close();
-				fis.close();
-			} catch (Exception exp) {
-			}
-		}
-
-	}
-
-	// Function to Create the Table and Add Data to Show.
 	private JTable makeTable() {
 		var cols = new Vector<>(Arrays.asList("Account No.", "Customer Name", "Opening Date", "Bank Balance"));
 		Vector<Vector<Object>> db = new Vector<>();
-		for (var p : data)
+		for (var p : repo.getData())
 			db.add(new Vector<>(Arrays.asList(p.getId(), p.getName(), p.getDate(), p.getBalance())));
 
 		dtmCustomer = new DefaultTableModel(db, cols);
