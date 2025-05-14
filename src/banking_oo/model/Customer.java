@@ -54,6 +54,9 @@ public class Customer {
 	public int getYear() {
 		return year;
 	}
+	public String getDate() {
+		return String.format("%s, %02d, %04d", month, day, year);
+	}
 
 	public int getBalance() {
 		return balance;
