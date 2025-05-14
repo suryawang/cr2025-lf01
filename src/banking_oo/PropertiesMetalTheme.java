@@ -1,4 +1,5 @@
 package banking_oo;
+
 import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class PropertiesMetalTheme extends DefaultMetalTheme {
 	private ColorUIResource black;
 	private ColorUIResource white;
 
-	public PropertiesMetalTheme ( InputStream stream ) {
+	public PropertiesMetalTheme(InputStream stream) {
 
 		initColors();
 		loadProperties(stream);
@@ -39,13 +40,12 @@ public class PropertiesMetalTheme extends DefaultMetalTheme {
 
 	}
 
-	private void loadProperties (InputStream stream) {
+	private void loadProperties(InputStream stream) {
 
-		Properties prop = new Properties();		
+		Properties prop = new Properties();
 		try {
 			prop.load(stream);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println(e);
 		}
 		Object tempName = prop.get("name");
@@ -53,8 +53,8 @@ public class PropertiesMetalTheme extends DefaultMetalTheme {
 			name = tempName.toString();
 		}
 		Object colorString = null;
-		colorString = prop.get ("primary1");		
-		if (colorString != null){
+		colorString = prop.get("primary1");
+		if (colorString != null) {
 			primary1 = parseColor(colorString.toString());
 		}
 		colorString = prop.get("primary2");
@@ -87,15 +87,41 @@ public class PropertiesMetalTheme extends DefaultMetalTheme {
 		}
 	}
 
-	public String getName() { return name; }
-	protected ColorUIResource getPrimary1() { return primary1; }
-	protected ColorUIResource getPrimary2() { return primary2; }
-	protected ColorUIResource getPrimary3() { return primary3; }
-	protected ColorUIResource getSecondary1() { return secondary1; }
-	protected ColorUIResource getSecondary2() { return secondary2; }
-	protected ColorUIResource getSecondary3() { return secondary3; }
-	protected ColorUIResource getBlack() { return black; }
-	protected ColorUIResource getWhite() { return white; }
+	public String getName() {
+		return name;
+	}
+
+	protected ColorUIResource getPrimary1() {
+		return primary1;
+	}
+
+	protected ColorUIResource getPrimary2() {
+		return primary2;
+	}
+
+	protected ColorUIResource getPrimary3() {
+		return primary3;
+	}
+
+	protected ColorUIResource getSecondary1() {
+		return secondary1;
+	}
+
+	protected ColorUIResource getSecondary2() {
+		return secondary2;
+	}
+
+	protected ColorUIResource getSecondary3() {
+		return secondary3;
+	}
+
+	protected ColorUIResource getBlack() {
+		return black;
+	}
+
+	protected ColorUIResource getWhite() {
+		return white;
+	}
 
 	private ColorUIResource parseColor(String s) {
 		int red = 0;
@@ -106,12 +132,11 @@ public class PropertiesMetalTheme extends DefaultMetalTheme {
 			red = Integer.parseInt(st.nextToken());
 			green = Integer.parseInt(st.nextToken());
 			blue = Integer.parseInt(st.nextToken());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e);
 			System.out.println("Couldn't parse color :" + s);
 		}
-	
+
 		return new ColorUIResource(red, green, blue);
 	}
 

@@ -1,4 +1,5 @@
 package banking_oo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -9,16 +10,16 @@ import javax.swing.event.*;
 
 public class BankHelp extends JInternalFrame {
 
-	public BankHelp (String title, String filename) {
+	public BankHelp(String title, String filename) {
 
 		// super(Title, Resizable, Closable, Maximizable, Iconifiable)
-		super (title, false, true, false, true);
-		setSize (500, 350);
+		super(title, false, true, false, true);
+		setSize(500, 350);
 
-		HtmlPane html = new HtmlPane (filename);
-		setContentPane (html);
+		HtmlPane html = new HtmlPane(filename);
+		setContentPane(html);
 
-		setVisible (true);
+		setVisible(true);
 
 	}
 
@@ -31,27 +32,25 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
 	public HtmlPane(String filename) {
 
 		try {
-			File f = new File (filename);
+			File f = new File(filename);
 			String s = f.getAbsolutePath();
-			s = "file:"+s;
+			s = "file:" + s;
 			URL url = new URL(s);
 			html = new JEditorPane(s);
 			html.setEditable(false);
 			html.addHyperlinkListener(this);
 			JViewport vp = getViewport();
 			vp.add(html);
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			System.out.println("Malformed URL: " + e);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println("IOException: " + e);
 		}
 
 	}
 
 	public void hyperlinkUpdate(HyperlinkEvent e) {
-	
+
 		if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 			linkActivated(e.getURL());
 		}
@@ -76,22 +75,19 @@ class HtmlPane extends JScrollPane implements HyperlinkListener {
 		}
 
 		public void run() {
-	
+
 			if (url == null) {
 				html.setCursor(cursor);
 				Container parent = html.getParent();
 				parent.repaint();
-			}
-			else {
+			} else {
 				Document doc = html.getDocument();
 				try {
 					html.setPage(url);
-				}
-				catch (IOException ioe) {
+				} catch (IOException ioe) {
 					html.setDocument(doc);
 					getToolkit().beep();
-				}
-				finally {
+				} finally {
 					url = null;
 					SwingUtilities.invokeLater(this);
 				}

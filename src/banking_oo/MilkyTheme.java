@@ -1,4 +1,5 @@
 package banking_oo;
+
 import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
@@ -7,9 +8,9 @@ import java.awt.*;
 
 public class MilkyTheme extends DefaultMetalTheme {
 
-	public String getName () {
+	public String getName() {
 
-		 return "Worthable Milky";
+		return "Worthable Milky";
 
 	}
 
@@ -19,10 +20,24 @@ public class MilkyTheme extends DefaultMetalTheme {
 	private final ColorUIResource secondary2 = new ColorUIResource(204, 204, 204);
 	private final ColorUIResource secondary3 = new ColorUIResource(250, 250, 250);
 
-	protected ColorUIResource getPrimary1() { return primary1; }
-	protected ColorUIResource getPrimary2() { return primary2; }
-	protected ColorUIResource getPrimary3() { return primary3; }
-	protected ColorUIResource getSecondary2() { return secondary2; }
-	protected ColorUIResource getSecondary3() { return secondary3; }
+	protected ColorUIResource getPrimary1() {
+		return primary1;
+	}
+
+	protected ColorUIResource getPrimary2() {
+		return primary2;
+	}
+
+	protected ColorUIResource getPrimary3() {
+		return primary3;
+	}
+
+	protected ColorUIResource getSecondary2() {
+		return secondary2;
+	}
+
+	protected ColorUIResource getSecondary3() {
+		return secondary3;
+	}
 
 }
