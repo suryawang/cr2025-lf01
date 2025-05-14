@@ -17,6 +17,10 @@ public class Customer {
 		setBalance(balance);
 	}
 
+	public static Customer createCustomerFromDb(String[] t) {
+		return new Customer(t[0], t[1], t[2], Integer.parseInt(t[3]), Integer.parseInt(t[4]), Integer.parseInt(t[5]));
+	}
+
 	public void setMonth(String month) {
 		this.month = month;
 	}
@@ -54,6 +58,7 @@ public class Customer {
 	public int getYear() {
 		return year;
 	}
+
 	public String getDate() {
 		return String.format("%s, %02d, %04d", month, day, year);
 	}
