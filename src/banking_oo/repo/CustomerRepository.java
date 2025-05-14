@@ -66,6 +66,12 @@ public class CustomerRepository {
 		data.set(index, customer);
 		save();
 	}
+	
+	public void setCustomer(Customer oldCustomer, Customer customer) throws IOException {
+		data.set(data.indexOf(oldCustomer), customer);
+		save();
+	}
+	
 
 	public void addCustomer(Customer customer) throws IOException {
 		data.add(customer);
