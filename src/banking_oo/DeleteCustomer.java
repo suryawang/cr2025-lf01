@@ -3,6 +3,10 @@ package banking_oo;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import banking_oo.model.Customer;
+import banking_oo.repo.CustomerRepository;
+
 import java.io.*;
 
 public class DeleteCustomer extends JInternalFrame implements ActionListener {
@@ -12,15 +16,8 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 	private JTextField txtNo, txtName, txtDate, txtBal;
 	private JButton btnDel, btnCancel;
 
-	private int recCount = 0;
-	private int rows = 0;
-	private int total = 0;
-
-	// String Type Array use to Load Records From File.
-	private String records[][] = new String[500][6];
-
-	private FileInputStream fis;
-	private DataInputStream dis;
+	private CustomerRepository repo = CustomerRepository.getInstance();
+	private Customer activeCustomer = null;
 
 	DeleteCustomer() {
 
@@ -95,8 +92,6 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 			public void focusLost(FocusEvent fe) {
 				if (txtNo.getText().equals("")) {
 				} else {
-					rows = 0;
-					populateArray(); // Load All Existing Records in Memory.
 					findRec(); // Finding if Account No. Already Exist or Not.
 				}
 			}
@@ -105,11 +100,8 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 		// Adding Panel to Window.
 		getContentPane().add(jpDel);
 
-		populateArray(); // Load All Existing Records in Memory.
-
 		// In the End Showing the New Account Window.
 		setVisible(true);
-
 	}
 
 	// Function use By Buttons of Window to Perform Action as User Click Them.
@@ -134,154 +126,58 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 
 	}
 
-	// Function use to load all Records from File when Application Execute.
-	void populateArray() {
-
-		try {
-			fis = new FileInputStream("Bank.dat");
-			dis = new DataInputStream(fis);
-			// Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF();
-				}
-				rows++;
-			}
-		} catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				btnEnable();
-			} else {
-				try {
-					dis.close();
-					fis.close();
-				} catch (Exception exp) {
-				}
-			}
-		}
-
-	}
-
 	// Function use to Find Record by Matching the Contents of Records Array with ID
 	// TextBox.
-	void findRec() {
-
-		boolean found = false;
-		for (int x = 0; x < total; x++) {
-			if (records[x][0].equals(txtNo.getText())) {
-				found = true;
-				showRec(x);
-				break;
-			}
-		}
-		if (found == false) {
+	private void findRec() {
+		activeCustomer = repo.find(txtNo.getText());
+		if (activeCustomer == null) {
 			String str = txtNo.getText();
 			txtClear();
 			JOptionPane.showMessageDialog(this, "Account No. " + str + " doesn't Exist.", "BankSystem - WrongNo",
 					JOptionPane.PLAIN_MESSAGE);
-		}
-
+		} else
+			showRec();
 	}
 
-	// Function which display Record from Array onto the Form.
-	void showRec(int intRec) {
-
-		txtNo.setText(records[intRec][0]);
-		txtName.setText(records[intRec][1]);
-		txtDate.setText(records[intRec][2] + ", " + records[intRec][3] + ", " + records[intRec][4]);
-		txtBal.setText(records[intRec][5]);
-		recCount = intRec;
-
+	private void showRec() {
+		txtNo.setText(activeCustomer.getId());
+		txtName.setText(activeCustomer.getName());
+		txtDate.setText(activeCustomer.getDate());
+		txtBal.setText(activeCustomer.getBalance() + "");
 	}
 
-	// Confirming the Deletion Decision made By User of Program.
-	void deletion() {
+	private void deletion() {
+		int reply = JOptionPane.showConfirmDialog(this,
+				"Are you Sure you want to Delete\n" + txtName.getText() + " Record From BankSystem?",
+				"Bank System - Delete", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if (reply == JOptionPane.YES_OPTION)
+			delRec();
+	}
 
+	private void delRec() {
 		try {
-			// Show a Confirmation Dialog.
-			int reply = JOptionPane.showConfirmDialog(this,
-					"Are you Sure you want to Delete\n" + txtName.getText() + " Record From BankSystem?",
-					"Bank System - Delete", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-			// Check the User Selection.
-			if (reply == JOptionPane.YES_OPTION) {
-				delRec(); // Delete the Selected Contents of Array.
-			} else if (reply == JOptionPane.NO_OPTION) {
-			}
-		}
-
-		catch (Exception e) {
-		}
-
-	}
-
-	// Function use to Delete an Element from the Array.
-	void delRec() {
-
-		try {
-			if (records != null) {
-				for (int i = recCount; i < total; i++) {
-					for (int r = 0; r < 6; r++) {
-						records[i][r] = records[i + 1][r];
-						if (records[i][r] == null)
-							break;
-					}
-				}
-				total = total - 1;
-				deleteFile();
-			}
-		} catch (ArrayIndexOutOfBoundsException ex) {
-		}
-
-	}
-
-	// Function use to Save Records to File After Deleting the Record of User
-	// Choice.
-	void deleteFile() {
-
-		try {
-			FileOutputStream fos = new FileOutputStream("Bank.dat");
-			DataOutputStream dos = new DataOutputStream(fos);
-			if (records != null) {
-				for (int i = 0; i < total; i++) {
-					for (int r = 0; r < 6; r++) {
-						dos.writeUTF(records[i][r]);
-						if (records[i][r] == null)
-							break;
-					}
-				}
-				JOptionPane.showMessageDialog(this, "Record has been Deleted Successfuly.",
-						"BankSystem - Record Deleted", JOptionPane.PLAIN_MESSAGE);
-				txtClear();
-			} else {
-			}
-			dos.close();
-			fos.close();
+			if (activeCustomer != null)
+				repo.removeCustomer(activeCustomer);
+			JOptionPane.showMessageDialog(this, "Record has been Deleted Successfuly.", "BankSystem - Record Deleted",
+					JOptionPane.PLAIN_MESSAGE);
+			txtClear();
 		} catch (IOException ioe) {
 			JOptionPane.showMessageDialog(this, "There are Some Problem with File", "BankSystem - Problem",
 					JOptionPane.PLAIN_MESSAGE);
 		}
-
 	}
 
-	// Function use to Clear all TextFields of Window.
-	void txtClear() {
-
+	private void txtClear() {
 		txtNo.setText("");
 		txtName.setText("");
 		txtDate.setText("");
 		txtBal.setText("");
 		txtNo.requestFocus();
-
 	}
 
-	// Function use to Lock Controls of Window.
 	void btnEnable() {
-
 		txtNo.setEnabled(false);
 		btnDel.setEnabled(false);
-
 	}
 
 }

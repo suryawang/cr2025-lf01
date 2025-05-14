@@ -1,5 +1,8 @@
 package banking_oo.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Customer {
 	private String id;
 	private String name;
@@ -19,6 +22,10 @@ public class Customer {
 
 	public static Customer createCustomerFromDb(String[] t) {
 		return new Customer(t[0], t[1], t[2], Integer.parseInt(t[3]), Integer.parseInt(t[4]), Integer.parseInt(t[5]));
+	}
+
+	public List<String> toDb() {
+		return Arrays.asList(id, name, month, day + "", year + "", balance + "");
 	}
 
 	public void setMonth(String month) {
