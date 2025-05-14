@@ -3,6 +3,10 @@ package banking_oo;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import banking_oo.model.Customer;
+import banking_oo.repo.CustomerRepository;
+
 import java.io.*;
 
 public class WithdrawMoney extends JInternalFrame implements ActionListener {
@@ -13,17 +17,8 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 	private JComboBox cboMonth, cboDay, cboYear;
 	private JButton btnSave, btnCancel;
 
-	private int recCount = 0;
-	private int rows = 0;
-	private int total = 0;
-	private int curr;
-	private int withdraw;
-
-	// String Type Array use to Load Records From File.
-	private String records[][] = new String[500][6];
-
-	private FileInputStream fis;
-	private DataInputStream dis;
+	private CustomerRepository repo = CustomerRepository.getInstance();
+	private Customer activeCustomer = null;
 
 	WithdrawMoney() {
 
@@ -56,8 +51,6 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 			public void focusLost(FocusEvent fe) {
 				if (txtNo.getText().equals("")) {
 				} else {
-					rows = 0;
-					populateArray(); // Load All Existing Records in Memory.
 					findRec(); // Finding if Account No. Already Exist or Not.
 				}
 			}
@@ -136,8 +129,6 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 		// Adding Panel to Window.
 		getContentPane().add(jpWith);
 
-		populateArray(); // Load All Existing Records in Memory.
-
 		// In the End Showing the New Account Window.
 		setVisible(true);
 
@@ -158,12 +149,12 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 						JOptionPane.PLAIN_MESSAGE);
 				txtWithdraw.requestFocus();
 			} else {
-				withdraw = Integer.parseInt(txtWithdraw.getText());
-				if (curr == 0) {
+				int withdraw = Integer.parseInt(txtWithdraw.getText());
+				if (activeCustomer.getBalance() == 0) {
 					JOptionPane.showMessageDialog(this, txtName.getText() + " doesn't have any Amount in Balance.",
 							"BankSystem - EmptyAccount", JOptionPane.PLAIN_MESSAGE);
 					txtClear();
-				} else if (withdraw > curr) {
+				} else if (withdraw > activeCustomer.getBalance()) {
 					JOptionPane.showMessageDialog(this, "Withdraw Amount can't greater than Actual Balance.",
 							"BankSystem - Large Amount", JOptionPane.PLAIN_MESSAGE);
 					txtWithdraw.setText("");
@@ -181,127 +172,44 @@ public class WithdrawMoney extends JInternalFrame implements ActionListener {
 
 	}
 
-	// Function use to load all Records from File when Application Execute.
-	void populateArray() {
-
-		try {
-			fis = new FileInputStream("Bank.dat");
-			dis = new DataInputStream(fis);
-			// Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF();
-				}
-				rows++;
-			}
-		} catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				btnEnable();
-			} else {
-				try {
-					dis.close();
-					fis.close();
-				} catch (Exception exp) {
-				}
-			}
-		}
-
-	}
-
-	// Function use to Find Record by Matching the Contents of Records Array with ID
-	// TextBox.
-	void findRec() {
-
-		boolean found = false;
-		for (int x = 0; x < total; x++) {
-			if (records[x][0].equals(txtNo.getText())) {
-				found = true;
-				showRec(x);
-				break;
-			}
-		}
-		if (found == false) {
+	private void findRec() {
+		activeCustomer = repo.find(txtNo.getText());
+		if (activeCustomer == null) {
 			String str = txtNo.getText();
 			txtClear();
 			JOptionPane.showMessageDialog(this, "Account No. " + str + " doesn't Exist.", "BankSystem - WrongNo",
 					JOptionPane.PLAIN_MESSAGE);
-		}
-
+		} else
+			showRec();
 	}
 
-	// Function which display Record from Array onto the Form.
-	public void showRec(int intRec) {
-
-		txtNo.setText(records[intRec][0]);
-		txtName.setText(records[intRec][1]);
-		curr = Integer.parseInt(records[intRec][5]);
-		recCount = intRec;
-
+	private void showRec() {
+		txtNo.setText(activeCustomer.getId());
+		txtName.setText(activeCustomer.getName());
 	}
 
-	// Function use to Clear all TextFields of Window.
-	void txtClear() {
-
+	private void txtClear() {
 		txtNo.setText("");
 		txtName.setText("");
 		txtWithdraw.setText("");
 		txtNo.requestFocus();
-
 	}
 
-	// Function use to Edit an Element's Value of the Array.
-	public void editRec() {
-
-		records[recCount][0] = txtNo.getText();
-		records[recCount][1] = txtName.getText();
-		records[recCount][2] = "" + cboMonth.getSelectedItem();
-		records[recCount][3] = "" + cboDay.getSelectedItem();
-		records[recCount][4] = "" + cboYear.getSelectedItem();
-		records[recCount][5] = "" + (curr - withdraw);
-		editFile(); // Save This Array to File.
-
-	}
-
-	// Function use to Save Records to File After editing the Record of User Choice.
-	public void editFile() {
-
+	private void editRec() {
+		if (activeCustomer == null)
+			return;
 		try {
-			FileOutputStream fos = new FileOutputStream("Bank.dat");
-			DataOutputStream dos = new DataOutputStream(fos);
-			if (records != null) {
-				for (int i = 0; i < total; i++) {
-					for (int c = 0; c < 6; c++) {
-						dos.writeUTF(records[i][c]);
-						if (records[i][c] == null)
-							break;
-					}
-				}
-				JOptionPane.showMessageDialog(this, "The File is Updated Successfully", "BankSystem - Record Saved",
-						JOptionPane.PLAIN_MESSAGE);
-				txtClear();
-				dos.close();
-				fos.close();
-			}
+			int withdraw = Integer.parseInt(txtWithdraw.getText());
+			var nc = new Customer(activeCustomer.getId(), activeCustomer.getName(), "" + cboMonth.getSelectedItem(),
+					Integer.parseInt("" + cboDay.getSelectedItem()), Integer.parseInt("" + cboYear.getSelectedItem()),
+					activeCustomer.getBalance() - withdraw);
+			repo.setCustomer(activeCustomer, nc);
+			JOptionPane.showMessageDialog(this, "The File is Updated Successfully", "BankSystem - Record Saved",
+					JOptionPane.PLAIN_MESSAGE);
+			txtClear();
 		} catch (IOException ioe) {
 			JOptionPane.showMessageDialog(this, "There are Some Problem with File", "BankSystem - Problem",
 					JOptionPane.PLAIN_MESSAGE);
 		}
-
 	}
-
-	// Function use to Lock all Buttons of Window.
-	void btnEnable() {
-
-		txtNo.setEnabled(false);
-		cboMonth.setEnabled(false);
-		cboDay.setEnabled(false);
-		cboYear.setEnabled(false);
-		txtWithdraw.setEnabled(false);
-		btnSave.setEnabled(false);
-
-	}
-
 }
