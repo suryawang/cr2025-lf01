@@ -74,7 +74,16 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 		jpDel.add(btnDel);
 		jpDel.add(btnCancel);
 
-		// Restricting The User Input to only Numerics in Numeric TextBoxes.
+		handleInputId();
+
+		// Adding Panel to Window.
+		getContentPane().add(jpDel);
+
+		// In the End Showing the New Account Window.
+		setVisible(true);
+	}
+
+	private void handleInputId() {
 		txtNo.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent ke) {
 				char c = ke.getKeyChar();
@@ -84,7 +93,6 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 				}
 			}
 		});
-		// Checking the Accunt No. Provided By User on Lost Focus of the TextBox.
 		txtNo.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 			}
@@ -96,12 +104,6 @@ public class DeleteCustomer extends JInternalFrame implements ActionListener {
 				}
 			}
 		});
-
-		// Adding Panel to Window.
-		getContentPane().add(jpDel);
-
-		// In the End Showing the New Account Window.
-		setVisible(true);
 	}
 
 	// Function use By Buttons of Window to Perform Action as User Click Them.

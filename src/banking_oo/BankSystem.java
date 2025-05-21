@@ -284,21 +284,7 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		popMenu.add(find);
 		popMenu.add(all);
 
-		// Following Procedure display the PopupMenu of Program.
-		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent me) {
-				checkMouseTrigger(me);
-			}
-
-			public void mouseReleased(MouseEvent me) {
-				checkMouseTrigger(me);
-			}
-
-			private void checkMouseTrigger(MouseEvent me) {
-				if (me.isPopupTrigger())
-					popMenu.show(me.getComponent(), me.getX(), me.getY());
-			}
-		});
+		setupPopupMenu();
 
 		// Creating the ToolBar's Buttons of Program.
 		btnNew = new JButton(new ImageIcon(ClassLoader.getSystemResource("Images/NotePad.gif")));
@@ -364,6 +350,23 @@ public class BankSystem extends JFrame implements ActionListener, ItemListener {
 		// Showing The Main Form of Application.
 		setVisible(true);
 
+	}
+
+	private void setupPopupMenu() {
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				checkMouseTrigger(me);
+			}
+
+			public void mouseReleased(MouseEvent me) {
+				checkMouseTrigger(me);
+			}
+
+			private void checkMouseTrigger(MouseEvent me) {
+				if (me.isPopupTrigger())
+					popMenu.show(me.getComponent(), me.getX(), me.getY());
+			}
+		});
 	}
 
 	// Function For Performing different Actions By Menus of Program.
