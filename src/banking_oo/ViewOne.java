@@ -3,7 +3,12 @@ package banking_oo;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import banking_oo.model.Customer;
+import banking_oo.repo.CustomerRepository;
+
 import java.io.*;
+import java.util.Vector;
 
 public class ViewOne extends JInternalFrame implements ActionListener {
 
@@ -12,15 +17,8 @@ public class ViewOne extends JInternalFrame implements ActionListener {
 	private JTextField txtNo, txtName, txtDate, txtBal, txtRec;
 	private JButton btnFirst, btnBack, btnNext, btnLast;
 
-	private int recCount = 0;
-	private int rows = 0;
-	private int total = 0;
-
-	// String Type Array use to Load Records From File.
-	private String records[][] = new String[500][6];
-
-	private FileInputStream fis;
-	private DataInputStream dis;
+	private Vector<Customer> data;
+	private int curr;
 
 	ViewOne() {
 
@@ -95,8 +93,9 @@ public class ViewOne extends JInternalFrame implements ActionListener {
 		getContentPane().add(jpRec);
 
 		// Load All Existing Records in Memory and Display them on Form.
-		populateArray();
-		showRec(0);
+		data = new Vector(CustomerRepository.getInstance().getData());
+		curr = 0;
+		showRec();
 
 		// In the End Showing the New Account Window.
 		setVisible(true);
@@ -105,93 +104,39 @@ public class ViewOne extends JInternalFrame implements ActionListener {
 
 	// Function use By Buttons of Window to Perform Action as User Click Them.
 	public void actionPerformed(ActionEvent ae) {
-
 		Object obj = ae.getSource();
-
-		if (obj == btnFirst) {
-			recCount = 0;
-			showRec(recCount);
-		} else if (obj == btnBack) {
-			recCount = recCount - 1;
-			if (recCount < 0) {
-				recCount = 0;
-				showRec(recCount);
+		if (obj == btnFirst)
+			curr = 0;
+		else if (obj == btnBack) {
+			if (--curr < 0) {
+				curr = 0;
 				JOptionPane.showMessageDialog(this, "You are on First Record.", "BankSystem - 1st Record",
 						JOptionPane.PLAIN_MESSAGE);
-			} else {
-				showRec(recCount);
 			}
 		} else if (obj == btnNext) {
-			recCount = recCount + 1;
-			if (recCount == total) {
-				recCount = total - 1;
-				showRec(recCount);
+			if (++curr == data.size()) {
+				curr = data.size() - 1;
 				JOptionPane.showMessageDialog(this, "You are on Last Record.", "BankSystem - End of Records",
 						JOptionPane.PLAIN_MESSAGE);
-			} else {
-				showRec(recCount);
 			}
-		} else if (obj == btnLast) {
-			recCount = total - 1;
-			showRec(recCount);
-		}
-
+		} else if (obj == btnLast)
+			curr = data.size() - 1;
+		showRec();
 	}
 
-	// Function use to load all Records from File when Application Execute.
-	void populateArray() {
-
-		try {
-			fis = new FileInputStream("Bank.dat");
-			dis = new DataInputStream(fis);
-			// Loop to Populate the Array.
-			while (true) {
-				for (int i = 0; i < 6; i++) {
-					records[rows][i] = dis.readUTF();
-				}
-				rows++;
-			}
-		} catch (Exception ex) {
-			total = rows;
-			if (total == 0) {
-				JOptionPane.showMessageDialog(null, "Records File is Empty.\nEnter Records First to Display.",
-						"BankSystem - EmptyFile", JOptionPane.PLAIN_MESSAGE);
-				btnEnable();
-			} else {
-				try {
-					dis.close();
-					fis.close();
-				} catch (Exception exp) {
-				}
-			}
-		}
-
+	private void showRec() {
+		var c = data.get(curr);
+		txtNo.setText(c.getId());
+		txtName.setText(c.getName());
+		txtDate.setText(c.getDate());
+		txtBal.setText(c.getBalance() + "");
+		txtRec.setText((curr + 1) + "/" + data.size());
 	}
 
-	// Function which display Record from Array onto the Form.
-	public void showRec(int intRec) {
-
-		txtNo.setText(records[intRec][0]);
-		txtName.setText(records[intRec][1]);
-		txtDate.setText(records[intRec][2] + ", " + records[intRec][3] + ", " + records[intRec][4]);
-		txtBal.setText(records[intRec][5]);
-		if (total == 0) {
-			txtRec.setText(intRec + "/" + total); // Showing Record No. and Total Records.
-			txtDate.setText("");
-		} else {
-			txtRec.setText((intRec + 1) + "/" + total); // Showing Record No. and Total Records.
-		}
-
-	}
-
-	// Function use to Lock all Buttons of Window.
-	void btnEnable() {
-
+	private void btnEnable() {
 		btnFirst.setEnabled(false);
 		btnBack.setEnabled(false);
 		btnNext.setEnabled(false);
 		btnLast.setEnabled(false);
-
 	}
-
 }
